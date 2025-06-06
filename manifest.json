@@ -1,0 +1,19 @@
+﻿[
+  {
+    "name": "Jellyfin.Plugin.ZTopPicks",
+    "guid": "45de9c0b-6c86-4709-9fc5-b69bac67535b",
+    "description": "Display your Top Picks for movies and shows.",
+    "overview": "A plugin to manually mark your favorite movies and shows as top picks.",
+    "owner": "Zoft",
+    "category": "General",
+    "versions": [
+      {
+        "version": "1.0.0",
+        "targetAbi": "10.9.0.0",
+        "sourceUrl": "https://github.com/Zoft123/ZTopPicks/releases/download/1.0.0/ZTopPicks.zip",
+        "checksum": "sha256:51e507455e1437a4034c3c32c743f89783edb92a55f0ae025539aa4965eb18c8",
+        "assembly": "Jellyfin.Plugin.ZTopPicks.dll"
+      }
+    ]
+  }
+]
