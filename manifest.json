@@ -11,7 +11,7 @@
         "version": "1.0.0",
         "targetAbi": "10.9.0.0",
         "sourceUrl": "https://github.com/Zoft123/ZTopPicks/releases/download/1.0.0/ZTopPicks.zip",
-        "checksum": "FE404DE9ED6648A655997AB2DECA5DC3",
+        "checksum": "40F4C81B839A8BD21F2C3CB7028C32BD",
         "assembly": "Jellyfin.Plugin.ZTopPicks.dll"
       }
     ]
