@@ -1,0 +1,93 @@
+<!-- File: Web/ZTopPicksPage.html -->
+<div ng-controller="ZTopPicksConfigController as vm" class="panel">
+    <h3>Zoft's Top Picks Configuration</h3>
+    <div>
+        <h4>Select up to 5 Movies</h4>
+        <div ng-repeat="movie in vm.movies">
+            <label>
+                <input type="checkbox" ng-model="movie.selected" ng-change="vm.updateCount('movie')" />
+                {{movie.Name}}
+            </label>
+        </div>
+        <p>Selected {{vm.selectedMoviesCount}} movies (max 5).</p>
+    </div>
+    <div>
+        <h4>Select up to 5 Shows</h4>
+        <div ng-repeat="show in vm.shows">
+            <label>
+                <input type="checkbox" ng-model="show.selected" ng-change="vm.updateCount('show')" />
+                {{show.Name}}
+            </label>
+        </div>
+        <p>Selected {{vm.selectedShowsCount}} shows (max 5).</p>
+    </div>
+    <button ng-click="vm.save()" ng-disabled="!vm.canSave()">Save Top Picks</button>
+</div>
+
+<script>
+    // Simple AngularJS controller
+    angular.module("app").controller("ZTopPicksConfigController", function ($scope, $http) {
+        var vm = this;
+        vm.movies = [];
+        vm.shows = [];
+        vm.selectedMoviesCount = 0;
+        vm.selectedShowsCount = 0;
+
+        // Load all movies and shows, and existing settings
+        $http.get("ZTopPicks/Movies").then(function (res) {
+            vm.movies = res.data.map(function (m) { m.selected = false; return m; });
+            $http.get("ZTopPicks/Settings").then(function (res) {
+                // pre-select saved IDs
+                vm.setInitialSelection(res.data.TopMovieIds, res.data.TopShowIds);
+            });
+        });
+        $http.get("ZTopPicks/Shows").then(function (res) {
+            vm.shows = res.data.map(function (s) { s.selected = false; return s; });
+        });
+
+        vm.setInitialSelection = function (movieIds, showIds) {
+            movieIds.forEach(function (id) {
+                var item = vm.movies.find(m => m.Id === id);
+                if (item) { item.selected = true; vm.selectedMoviesCount++; }
+            });
+            showIds.forEach(function (id) {
+                var item = vm.shows.find(s => s.Id === id);
+                if (item) { item.selected = true; vm.selectedShowsCount++; }
+            });
+        };
+
+        vm.updateCount = function (type) {
+            if (type === 'movie') {
+                vm.selectedMoviesCount = vm.movies.filter(m => m.selected).length;
+                if (vm.selectedMoviesCount > 5) { // enforce max 5
+                    alert("You can select at most 5 movies.");
+                    // Undo last selection
+                    vm.movies[vm.movies.length - 1].selected = false;
+                    vm.selectedMoviesCount--;
+                }
+            } else {
+                vm.selectedShowsCount = vm.shows.filter(s => s.selected).length;
+                if (vm.selectedShowsCount > 5) {
+                    alert("You can select at most 5 shows.");
+                    vm.shows[vm.shows.length - 1].selected = false;
+                    vm.selectedShowsCount--;
+                }
+            }
+        };
+
+        vm.canSave = function () {
+            return (vm.selectedMoviesCount >= 3 || vm.selectedShowsCount >= 3);
+        };
+
+        vm.save = function () {
+            // Gather selected IDs
+            var data = {
+                TopMovieIds: vm.movies.filter(m => m.selected).map(m => m.Id),
+                TopShowIds: vm.shows.filter(s => s.selected).map(s => s.Id)
+            };
+            $http.post("ZTopPicks/Settings", data).then(function () {
+                alert("Top Picks saved. Restart server or refresh metadata to apply collections.");
+            });
+        };
+    });
+</script>

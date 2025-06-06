@@ -1,0 +1,14 @@
+name: "ZTopPicks (Zoft)"
+guid: "45de9c0b-6c86-4709-9fc5-b69bac67535b"
+version: "1.0.0.0"
+targetAbi: "10.9.0.0"
+framework: "net8.0"
+overview: "Select Top Picks of Movies & TV Series to display to your userbase."
+description: >
+  This plugin enables you to have the ability to select 3-5 'Top Picks' of Movies & TV Shows to be shown as a 'Collection' to your userbase.
+category: "General"
+owner: "Zoft"
+artifacts:
+  - "Jellyfin.Plugin.ZTopPicks.dll"
+changelog: >
+  Initial release with ability to select Top Picks enabled.
